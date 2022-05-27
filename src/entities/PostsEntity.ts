@@ -6,6 +6,7 @@ class PostsEntity{
     title: string
     description: string
     url_file: string
+    date_post: Date
 
     constructor(body: Omit<PostsEntity, 'id'>, id = randomUUID()){
         this.id = id
@@ -13,6 +14,7 @@ class PostsEntity{
         this.title = body.title
         this.description = body.description
         this.url_file = body.url_file
+        this.date_post = body.date_post
     }
 }
 

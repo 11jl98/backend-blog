@@ -1,0 +1,17 @@
+import { randomUUID } from "crypto"
+
+class UserEntity{
+    id: string
+    id_user: string
+    id_followers: string
+    date: string
+
+    constructor(body: Omit<UserEntity, 'id'>, id = randomUUID()){
+        this.id = id
+        this.id_user = body.id_user
+        this.id_followers = body.id_followers
+        this.date = body.date
+    }
+}
+
+export { UserEntity }

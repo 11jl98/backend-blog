@@ -7,6 +7,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string('title').unique()
         table.string('url_file')
         table.string('description').notNullable()
+        table.dateTime('date_post').notNullable()
     })
 }
 
