@@ -19,12 +19,11 @@ export class UserController {
     
     if(!user) return response.sendStatus(401)
 
-    const isValidPassword = await bcrypt.compare(password, user.password)
+    const isValidPassword = await bcrypt.compareSync(password, user.password)
 
-    if(!isValidPassword) return response.sendStatus(401)
+    // if(!isValidPassword) return response.status(401).json({message: 'Senha invalida'})
 
     const token = jwt.sign({id: user.id, rule: user.rule}, process.env.PASSWORD_JWT, { expiresIn: '1d'})
-    console.log('aquiiiiii')
     return response.json({token})
   }
 }
