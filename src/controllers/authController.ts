@@ -24,7 +24,7 @@ export class UserController {
     if(!isValidPassword) return response.sendStatus(401)
 
     const token = jwt.sign({id: user.id, rule: user.rule}, process.env.PASSWORD_JWT, { expiresIn: '1d'})
-
+    console.log('aquiiiiii')
     return response.json({token})
   }
 }

@@ -2,14 +2,14 @@ import multer from 'multer'
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './uploads/posts')
+      cb(null, './uploads/user/capa')
     },
     filename: function (req, file, cb) {
-        cb(null, req.id_user + '.' + file.originalname.split('.')[1])
+        cb(null, req.id_user + '_capa' +  '.' + file.originalname.split('.')[1])
     }
   })
 
-export const UploadImagesPostMiddlewares = multer({
+export const UploadImagesCapaUserMiddlewares = multer({
     storage,
     fileFilter: (req, file, cb)=> {
       const extentionImg = ['image/png', 'image/jpg', 'image/jpeg'].find(

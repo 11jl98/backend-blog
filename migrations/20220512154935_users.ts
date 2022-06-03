@@ -8,6 +8,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string('name_user').notNullable().unique()
         table.string('password')
         table.string('avatar_url')
+        table.string('url_capa')
         table.string('description')
         table.enum('rule', ['admin', 'normal']).notNullable().defaultTo('normal')
     })

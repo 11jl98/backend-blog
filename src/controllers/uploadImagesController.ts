@@ -3,6 +3,8 @@ import { Request, Response } from 'express'
 import { UserService } from '../services/UserService'
 import { UploadImagesMiddlewares } from '../utils/middlewares/UploadImagesUserMiddlewares'
 import { authMiddlewares } from '../utils/middlewares/AuthMiddlewares'
+import { UploadImagesPostMiddlewares } from '../utils/middlewares/UploadImagesPostMiddlewares'
+import { UploadImagesCapaUserMiddlewares } from '../utils/middlewares/UploadImagesCapaUserMiddlewares'
 import path from 'path'
 
 @route('/upload')
@@ -27,6 +29,7 @@ export class uploadImagesController {
     })
   }
 
+@route('/avatar-user')
 @GET()
 @before([authMiddlewares])
   async getLogoUser (request: Request, response: Response) {
@@ -42,7 +45,7 @@ export class uploadImagesController {
 
 @route('/post-file')
 @POST()
-@before([authMiddlewares, UploadImagesMiddlewares.single('image')])
+@before([authMiddlewares, UploadImagesPostMiddlewares.single('image')])
   async uploadLogoPost (request: Request, response: Response) {
     
     const user = await this.#userService.findById(request.id_user)
@@ -67,4 +70,20 @@ export class uploadImagesController {
 
     return response.sendStatus(404)
   }
+
+
+@route('/capa-file')
+@POST()
+@before([authMiddlewares, UploadImagesCapaUserMiddlewares.single('image')])
+async uploadCapaPost (request: Request, response: Response) {
+    
+  const user = await this.#userService.findById(request.id_user)
+
+  await this.#userService.update({...user, avatar_url: request.file.filename}, user.id)
+
+  if(request.file) return response.status(201).json({
+      url: request.file.filename
+  })
 }
+}
+
