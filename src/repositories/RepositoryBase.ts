@@ -24,14 +24,7 @@ export class RepositoryBase<T> {
       .where('id', '=', id)
   }
 
-  async findByEmailAndPassword (email: string, password: string): Promise<T> {
-    const data = this.database.table(this.table)
-      .select('*')
-      .where('email', '=', email)
-      .first()
-    return await data
-    
-  }
+
   
   async findById (id: string): Promise<T> {
     const data = this.database.table(this.table)

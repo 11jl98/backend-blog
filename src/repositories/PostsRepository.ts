@@ -18,4 +18,19 @@ export class PostsRepo extends RepositoryBase<PostsEntity>{
         return await data
     }
 
+    async getPostsUserAll(id_user: string){
+        const data = this.#database.table(this.#table)
+        .select('id','url_file')
+        .where('id_user', '=', id_user)
+        return await data
+    }
+
+    async countPostsUser(id_user: string){
+        const data = this.#database.table(this.#table)
+        .where('id_user', '=', id_user)
+        .count('id as total')
+        .first()
+        return await data
+    }
+
 }

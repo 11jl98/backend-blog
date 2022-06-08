@@ -2,7 +2,6 @@ import { POST, route, GET, PUT, before } from 'awilix-express'
 import {Request, response, Response } from 'express'
 import { PostsService } from '../services/PostsService'
 import { authMiddlewares } from '../utils/middlewares/AuthMiddlewares'
-import { AclMiddlewares } from '../utils/middlewares/AclMiddlewares'
 
 @route('/posts')
 export class UserController {
@@ -34,9 +33,18 @@ export class UserController {
       }
 
       @GET()
+      @before([authMiddlewares])
       async getPosts(request: Request, response: Response){
         const data = await this.#postsService.getPosts()
         return response.status(201).json(data)
+      }
+      @route('/count')
+      @GET()
+      @before([authMiddlewares])
+      async getCountPosts(request: Request, response: Response){
+        const { id_user } = request
+        const data = await this.#postsService.countPostsUser(id_user)
+        return response.status(201).json({totals: data})
       }
       
     }

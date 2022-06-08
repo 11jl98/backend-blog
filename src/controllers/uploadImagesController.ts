@@ -1,6 +1,7 @@
-import { POST, route, GET, before } from 'awilix-express'
+import { POST, route, GET, before, PUT } from 'awilix-express'
 import { Request, Response } from 'express'
 import { UserService } from '../services/UserService'
+import { PostsService } from '../services/PostsService'
 import { UploadImagesMiddlewares } from '../utils/middlewares/UploadImagesUserMiddlewares'
 import { authMiddlewares } from '../utils/middlewares/AuthMiddlewares'
 import { UploadImagesPostMiddlewares } from '../utils/middlewares/UploadImagesPostMiddlewares'
@@ -10,9 +11,11 @@ import fs from "fs"
 @route('/upload')
 export class uploadImagesController {
     #userService: UserService
+    #postsService: PostsService
 
-    constructor ({ userService }) {
+    constructor ({ userService, postsService }) {
         this.#userService = userService
+        this.#postsService = postsService
       }
 
 @route('/avatar-user')
@@ -22,7 +25,7 @@ export class uploadImagesController {
     
     const user = await this.#userService.findById(request.id_user)
 
-    await this.#userService.update({...user, avatar_url: request.file.filename}, user.id)
+    await this.#userService.update({...user, avatar_url: `${process.env.BASE_URL}user/${request.file.filename}`}, user.id)
 
     if(request.file) return response.status(201).json({
         url: request.file.filename
@@ -44,18 +47,34 @@ export class uploadImagesController {
     return response.sendStatus(404)
   }
 
-@route('/post-file')
-@POST()
+@route('/post-file/:id')
+@PUT()
 @before([authMiddlewares, UploadImagesPostMiddlewares.single('image')])
   async uploadLogoPost (request: Request, response: Response) {
     
-    const user = await this.#userService.findById(request.id_user)
+    const post = await this.#postsService.findById(request.params.id)
 
-    await this.#userService.update({...user, avatar_url: request.file.filename}, user.id)
+    await this.#postsService.update({...post, url_file: `${process.env.BASE_URL}imagePosts/${request.file.filename}`}, post.id)
 
     if(request.file) return response.status(201).json({
         url: request.file.filename
     })
+  }
+
+
+@route('/post-file/:id')
+@GET()
+@before([authMiddlewares])
+  async getLogoPostAllUser (request: Request, response: Response) {
+    
+    const post = await this.#postsService.findById(request.params.id)
+
+    if(post.url_file) {
+      const x = fs.readFileSync(path.resolve(__dirname + '../../../','uploads/imagePosts', post.url_file), "base64" )
+      return response.status(201).json({base64: x})
+    }
+
+    return response.sendStatus(404)
   }
 
 @route('/post-file')
@@ -63,13 +82,12 @@ export class uploadImagesController {
 @before([authMiddlewares])
   async getLogoPost (request: Request, response: Response) {
     
-    const user = await this.#userService.findById(request.id_user)
+    const posts = await this.#postsService.getPostsUserAll(request.id_user)
 
-    console.log(path.resolve(__dirname + '../../../', 'uploads/posts', user.avatar_url))
+    if(!posts) return response.status(404).json([])
 
-    if(user.avatar_url) return response.status(201).sendFile(path.resolve(__dirname + '../../../','uploads/posts', user.avatar_url))
 
-    return response.sendStatus(404)
+    return response.status(201).json(posts)
   }
 
 
@@ -80,7 +98,7 @@ async uploadCapaPost (request: Request, response: Response) {
     
   const user = await this.#userService.findById(request.id_user)
 
-  await this.#userService.update({...user, url_capa: request.file.filename}, user.id)
+  await this.#userService.update({...user, url_capa: `${process.env.BASE_URL}user/capa/${request.file.filename}`}, user.id)
 
   if(request.file) return response.status(201).json({
       url: request.file.filename

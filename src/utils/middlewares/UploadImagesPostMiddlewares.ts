@@ -2,10 +2,10 @@ import multer from 'multer'
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './uploads/posts')
+      cb(null, './uploads/imagePosts')
     },
     filename: function (req, file, cb) {
-        cb(null, req.id_user + '.' + file.originalname.split('.')[1])
+        cb(null, req.params.id + '.' + file.originalname.split('.')[1])
     }
   })
 

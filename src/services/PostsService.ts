@@ -18,8 +18,24 @@ export class PostsService{
         await this.#postsRepo.update(post, id)
         return post.id
     }
+
+    async findById(id: string){
+        const post = await this.#postsRepo.findById(id)
+        return post
+    }
+
     async getPosts(){
         const posts = await this.#postsRepo.getPosts()
+        return posts
+    }
+
+    async getPostsUserAll(id_user: string){
+        const posts = await this.#postsRepo.getPostsUserAll(id_user)
+        return posts
+    }
+
+    async countPostsUser(id_user: string){
+        const posts = await this.#postsRepo.countPostsUser(id_user)
         return posts
     }
 }

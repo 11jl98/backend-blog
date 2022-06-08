@@ -11,5 +11,14 @@ class UserRepo extends RepositoryBase<UserEntity>{
       this.#table = 'users'
       this.#database = database
     }
+
+    async findByEmailAndPassword (email: string, password: string) {
+      const data = this.#database.table(this.#table)
+        .select('*')
+        .where('email', '=', email)
+        .first()
+      return await data
+      
+    }
 }
 export { UserRepo }
