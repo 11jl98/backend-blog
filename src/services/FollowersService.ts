@@ -21,10 +21,21 @@ class FollowersService{
         return follower.id
     }
 
+    async destroy(id_followers: string, id_user: string){
+        return await this.#followersRepo.destroy(id_followers, id_user)
+         
+    }
+
     async countFollowersPerUser(id_user: string){
         const follower = await this.#followersRepo.countFollowersPerUser(id_user)
         return follower
     }
+
+    async findById(id_followers: string, id_user: string ){
+        const follower = await this.#followersRepo.findByIds(id_followers, id_user)
+        return follower?.id
+    }
 }
+
 
 export {FollowersService}

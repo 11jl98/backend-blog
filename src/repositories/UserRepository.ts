@@ -18,7 +18,14 @@ class UserRepo extends RepositoryBase<UserEntity>{
         .where('email', '=', email)
         .first()
       return await data
-      
+    }
+    async getUsersSearch(queryParams: string, id_user: string){
+      const data = this.#database.table(this.#table)
+        .select(['name_user', 'avatar_url', 'users.id'])
+        .where('name_user', 'like', `%${queryParams}%`)
+        .andWhere('users.id', '<>', id_user)
+
+      return await data
     }
 }
 export { UserRepo }

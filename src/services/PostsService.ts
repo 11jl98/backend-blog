@@ -24,8 +24,8 @@ export class PostsService{
         return post
     }
 
-    async getPosts(){
-        const posts = await this.#postsRepo.getPosts()
+    async getPosts(id_user: string, perPage: string, page: string){
+        const posts = await this.#postsRepo.getPosts(id_user, perPage, page)
         return posts
     }
 

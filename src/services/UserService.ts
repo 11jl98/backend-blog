@@ -29,6 +29,10 @@ class UserService{
         const user = await this.#userRepo.findById(id)
         return user
     }
+    async getUserSearch(queryParams: string, id_user: string){
+        const users = await this.#userRepo.getUsersSearch(queryParams, id_user)
+        return users
+    }
 }
 
 export {UserService}

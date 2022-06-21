@@ -24,7 +24,6 @@ export function authMiddlewares(request:Request, response:Response, next:NextFun
         next()
 
     } catch (error) {
-        console.log(error)
         return response.sendStatus(401)
     }
 }

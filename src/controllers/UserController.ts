@@ -39,4 +39,15 @@ async findById(request: Request, response: Response){
     return response.status(201).json(data)
 }
 
+@route('/search')
+@GET()
+@before([authMiddlewares])
+async searchUsers(request: Request, response: Response){
+    const { q } = request.query
+    const { id_user } = request
+    const data = await this.#userService.getUserSearch(q as string, id_user)
+    
+    return response.status(201).json(data)
+}
+
 }

@@ -15,4 +15,4 @@ app.use(scopePerRequest(container))
 app.use(loadControllers('controllers/*.ts', { cwd: __dirname }))
 app.use('/static', Express.static(path.resolve( './uploads')));
 
-app.listen(3001, ()=> console.log(path.resolve( './uploads')))
+app.listen(3001, ()=> console.log(process.env.BASE_URL))

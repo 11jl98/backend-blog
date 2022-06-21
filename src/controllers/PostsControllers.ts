@@ -35,7 +35,9 @@ export class UserController {
       @GET()
       @before([authMiddlewares])
       async getPosts(request: Request, response: Response){
-        const data = await this.#postsService.getPosts()
+        const { id_user } = request
+        const { perPage, page } = request.query
+        const data = await this.#postsService.getPosts(id_user, perPage as string, page as string)
         return response.status(201).json(data)
       }
       @route('/count')

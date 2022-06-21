@@ -17,8 +17,23 @@ class FollowersRepo extends RepositoryBase<FollowersEntity>{
           .where('id_user', '=', id_user)
           .count('id as total')
           .first()
-        return await data
-        
+        return await data   
       }
+
+    async findByIds(id_followers:string, id_user: string) {
+      const data = this.#database.table(this.#table)
+      .select('id')
+      .where('id_user', '=', id_user)
+      .where('id_followers', '=', id_followers)
+      .first()
+      return await data
+    }
+
+    async destroy (id_followers: string, id_user:string) {
+      await this.#database.table(this.#table)
+        .delete()
+        .where('id_followers', '=', id_followers)
+        .andWhere('id_user', '=', id_user)
+    }
 }
 export { FollowersRepo }

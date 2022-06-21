@@ -11,16 +11,20 @@ export class PostsRepo extends RepositoryBase<PostsEntity>{
         this.#table = 'posts'
     }
 
-    async getPosts(){
+    async getPosts(id_user: string, perPage: string, page: string){
         const data = this.#database.table(this.#table)
         .select([`${this.#table}.id`, 'title',`${this.#table}.description`, 'url_file', 'users.avatar_url', 'users.name_user'])
         .leftJoin('users', 'users.id', '=', `${this.#table}.id_user`)
-        return await data
+        .leftJoin('followers', 'followers.id_user', '=', `${this.#table}.id_user` )
+        .where('users.id', '<>', id_user)
+        .limit( parseInt(perPage) )
+        .offset( (parseInt(page)-1) * parseInt(perPage) )
+        return data
     }
 
     async getPostsUserAll(id_user: string){
         const data = this.#database.table(this.#table)
-        .select('id','url_file')
+        .select(['id','url_file'])
         .where('id_user', '=', id_user)
         return await data
     }
@@ -32,5 +36,6 @@ export class PostsRepo extends RepositoryBase<PostsEntity>{
         .first()
         return await data
     }
+
 
 }

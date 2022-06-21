@@ -7,7 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid('id').primary()
     table.uuid('id_user').references('id').inTable('users')
     table.uuid('id_followers').references('id').inTable('users')
-    table.dateTime('date').notNullable()
+    table.dateTime('date').defaultTo(null)
 })
 }
 
