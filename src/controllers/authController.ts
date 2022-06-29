@@ -15,10 +15,11 @@ export class UserController {
 @POST()
   async findById (request: Request, response: Response) {
     const {email, password} = request.body
+
     const user = await this.#userService.findByEmailAndPassword(email, password)
     
     if(!user) return response.sendStatus(401)
-
+    console.log( 'testretre')
     const isValidPassword = await bcrypt.compareSync(password, user.password)
 
     // if(!isValidPassword) return response.status(401).json({message: 'Senha invalida'})
